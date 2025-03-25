@@ -48,9 +48,7 @@ pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
     controller_store.token_mint = token_mint;
     controller_store.owner = ctx.accounts.payer.key();
     controller_store.pending_owner = Pubkey::default();
-    controller_store.pending_owner_program = Pubkey::default();
     controller_store.pending_mint_authority = Pubkey::default();
-    controller_store.pending_mint_authority_program = Pubkey::default();
     controller_store.bump = ctx.bumps.controller_store;
 
     emit!(ControllerInitialized {

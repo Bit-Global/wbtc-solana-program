@@ -20,6 +20,8 @@ pub enum CustomError {
     InvalidPendingOwner,
     #[msg("Member check failed")]
     MemberCheckFailed,
+    #[msg("Invalid pending authority")]
+    InvalidPendingAuthority,
     #[msg("Invalid factory program")]
     InvalidFactoryProgram,
     #[msg("Already initialized")]

@@ -75,6 +75,7 @@ pub fn handler(
     // emit event
     emit!(CustodianBtcDepositAddressSet {
         merchant: params.merchant,
+        custodian: ctx.accounts.payer.key(),
         btc_deposit_address: params.btc_deposit_address.clone(),
     });
 

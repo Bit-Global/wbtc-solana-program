@@ -36,13 +36,11 @@ pub fn transfer_mint_authority(
     let controller_store = &mut ctx.accounts.controller_store;
     require!(
         params.new_authority != Pubkey::default(),
-        CustomError::InvalidOwner
+        CustomError::InvalidPendingAuthority
     );
 
     // Set pending mint authority
     controller_store.pending_mint_authority = params.new_authority;
-    // Clear program ID if any was set before
-    controller_store.pending_mint_authority_program = Pubkey::default();
 
     emit!(MintAuthorityTransferStarted {
         token_mint: ctx.accounts.token_mint.key(),

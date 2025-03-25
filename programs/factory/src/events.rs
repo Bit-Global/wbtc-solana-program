@@ -5,6 +5,7 @@ pub struct CustodianBtcDepositAddressSet {
     #[index]
     pub merchant: Pubkey,
     #[index]
+    pub custodian: Pubkey,
     pub btc_deposit_address: String,
 }
 

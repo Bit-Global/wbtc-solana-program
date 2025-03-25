@@ -16,6 +16,7 @@ declare_id!("3pVBN6dAvQMp7xG73t2y2isiEcZGqkyjXkySW6SdrG6v");
 
 // Seeds constants
 pub const CONTROLLER_SEED: &[u8] = b"controller";
+pub const FACTORY_SEED: &[u8] = b"factory";
 
 #[program]
 pub mod controller {

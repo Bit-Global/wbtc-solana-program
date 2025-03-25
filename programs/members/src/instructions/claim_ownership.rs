@@ -21,11 +21,6 @@ pub fn claim_ownership(ctx: Context<ClaimOwnership>) -> Result<()> {
     let members_store = &mut ctx.accounts.members_store;
     let pending_owner = members_store.pending_owner;
 
-    require!(
-        pending_owner != Pubkey::default(),
-        MembersError::NoPendingOwner
-    );
-
     let previous_owner = members_store.owner;
     members_store.owner = pending_owner;
     members_store.pending_owner = Pubkey::default();

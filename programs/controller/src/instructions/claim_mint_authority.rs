@@ -12,7 +12,7 @@ pub struct ClaimMintAuthority<'info> {
         mut,
         seeds = [CONTROLLER_SEED],
         bump = controller_store.bump,
-        constraint = controller_store.pending_mint_authority == pending_authority.key() @ CustomError::InvalidPendingOwner
+        constraint = controller_store.pending_mint_authority == pending_authority.key() @ CustomError::InvalidPendingAuthority
     )]
     pub controller_store: Account<'info, ControllerStore>,
     pub pending_authority: Signer<'info>,
@@ -28,11 +28,6 @@ pub struct ClaimMintAuthority<'info> {
 pub fn claim_mint_authority(ctx: Context<ClaimMintAuthority>) -> Result<()> {
     let controller_store = &mut ctx.accounts.controller_store;
     let pending_authority = controller_store.pending_mint_authority;
-
-    require!(
-        pending_authority != Pubkey::default(),
-        CustomError::NoPendingOwner
-    );
 
     // Get the seeds for PDA signing
     let controller_seeds = &[CONTROLLER_SEED, &[controller_store.bump]];
@@ -56,7 +51,6 @@ pub fn claim_mint_authority(ctx: Context<ClaimMintAuthority>) -> Result<()> {
 
     // Reset pending mint authority
     controller_store.pending_mint_authority = Pubkey::default();
-    controller_store.pending_mint_authority_program = Pubkey::default();
 
     emit!(MintAuthorityTransferred {
         token_mint: ctx.accounts.token_mint.key(),

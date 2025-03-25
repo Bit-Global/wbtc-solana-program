@@ -228,25 +228,29 @@ pub struct ConfirmMintRequest<'info> {
     pub token_program: Interface<'info, TokenInterface>,
     pub associated_token_program: Program<'info, AssociatedToken>, 
     pub system_program: Program<'info, System>,
-    /// CHECK: Used for verifying CPI calls in the controller program
-    #[account(address = anchor_lang::solana_program::sysvar::instructions::ID)]
-    pub instruction_sysvar: UncheckedAccount<'info>,
 }
 
 pub fn confirm_mint_request_handler(ctx: Context<ConfirmMintRequest>, params: ConfirmMintParams) -> Result<()> {
     let request = &mut ctx.accounts.request_account;
     
-    // CPI call the mint method of controller
+    // call the mint method of controller
     let cpi_program = ctx.accounts.controller_program.to_account_info();
     let cpi_accounts = controller_cpi::accounts::_Mint {
+        factory_store: ctx.accounts.factory_store.to_account_info(),
         controller_store: ctx.accounts.controller_store.to_account_info(),
         token_mint: ctx.accounts.token_mint.to_account_info(),
         token_account: ctx.accounts.token_account.to_account_info(),
         token_program: ctx.accounts.token_program.to_account_info(),
         associated_token_program: ctx.accounts.associated_token_program.to_account_info(),
-        instruction_sysvar: ctx.accounts.instruction_sysvar.to_account_info(),
     };
-    let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
+
+    // prepare PDA signature
+    let factory_seeds = &[FACTORY_SEED, &[ctx.accounts.factory_store.bump]];
+    let signer_seeds = &[&factory_seeds[..]];
+    
+    // use with_signer to pass PDA signature
+    let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
+    
     controller_cpi::mint(cpi_ctx, controller_instructions::mint::MintParams {
         to: ctx.accounts.to_address.key(),
         amount: request.amount,

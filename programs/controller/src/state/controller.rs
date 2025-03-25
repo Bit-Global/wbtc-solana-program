@@ -9,7 +9,5 @@ pub struct ControllerStore {
     pub factory: Pubkey,
     pub owner: Pubkey,
     pub pending_owner: Pubkey,
-    pub pending_owner_program: Pubkey,
     pub pending_mint_authority: Pubkey,
-    pub pending_mint_authority_program: Pubkey,
 }
