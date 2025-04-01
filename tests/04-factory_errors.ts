@@ -689,6 +689,7 @@ describe("factory_error_tests", () => {
           controllerStore,
           membersStore,
           merchantBtcAddress,
+          merchantInfo,
           tokenMint,
           tokenAccount: merchantTokenAccount,
           controllerTokenAccount,

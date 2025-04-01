@@ -51,7 +51,7 @@ pub fn burn(ctx: Context<Burn>, params: BurnParams) -> Result<()> {
     let signer_seeds = &[&controller_seeds[..]];
 
     // Create a CPI context with signer seeds
-    let cpi_accounts = token_interface::Burn {
+    let cpi_accounts = token_interface::BurnChecked {
         mint: ctx.accounts.token_mint.to_account_info(),
         from: ctx.accounts.controller_token_account.to_account_info(),
         authority: controller_store.to_account_info(),
@@ -61,7 +61,7 @@ pub fn burn(ctx: Context<Burn>, params: BurnParams) -> Result<()> {
     let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
 
     // Execute burn operation
-    token_interface::burn(cpi_ctx, params.amount)?;
+    token_interface::burn_checked(cpi_ctx, params.amount, ctx.accounts.token_mint.decimals)?;
 
     Ok(())
 }

@@ -207,7 +207,6 @@ pub struct ConfirmMintRequest<'info> {
         mut,
         address = controller_store.token_mint,
         mint::token_program = token_program,
-        constraint = token_mint.key() == controller_store.token_mint @ FactoryError::InvalidTokenMint
     )]
     pub token_mint: InterfaceAccount<'info, Mint>,
     /// CHECK: Verify that to_address matches request_account.requester

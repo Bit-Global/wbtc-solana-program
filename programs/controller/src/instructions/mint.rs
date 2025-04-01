@@ -56,7 +56,7 @@ pub fn mint(ctx: Context<_Mint>, params: MintParams) -> Result<()> {
     let signer_seeds = &[&controller_seeds[..]];
 
     // Create a CPI context with signer seeds
-    let cpi_accounts = token_interface::MintTo {
+    let cpi_accounts = token_interface::MintToChecked {
         mint: ctx.accounts.token_mint.to_account_info(),
         to: ctx.accounts.token_account.to_account_info(),
         authority: controller_store.to_account_info(),
@@ -66,7 +66,7 @@ pub fn mint(ctx: Context<_Mint>, params: MintParams) -> Result<()> {
     let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
 
     // Execute mint operation
-    token_interface::mint_to(cpi_ctx, params.amount)?;
+    token_interface::mint_to_checked(cpi_ctx, params.amount, ctx.accounts.token_mint.decimals)?;
 
     Ok(())
 }

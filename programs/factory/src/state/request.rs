@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use solana_program::keccak::hashv;
+use anchor_lang::solana_program::keccak::hashv;
 
 #[account]
 #[derive(InitSpace, Debug)]
