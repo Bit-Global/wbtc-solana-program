@@ -38,10 +38,6 @@ pub mod controller {
         instructions::mint::mint(ctx, params)
     }
 
-    pub fn burn(ctx: Context<Burn>, params: BurnParams) -> Result<()> {
-        instructions::burn::burn(ctx, params)
-    }
-
     pub fn transfer_ownership(
         ctx: Context<SetOwnerContext>,
         params: TransferOwnershipParams,

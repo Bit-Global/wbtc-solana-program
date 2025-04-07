@@ -388,7 +388,6 @@ describe("factory", () => {
         tokenMint,
         tokenAccount: merchantTokenAccount,
         controllerTokenAccount,
-        controllerProgram: controllerProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         systemProgram: SystemProgram.programId,

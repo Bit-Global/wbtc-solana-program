@@ -1,5 +1,4 @@
 // Module declarations
-pub mod burn;
 pub mod claim_mint_authority;
 pub mod claim_ownership;
 pub mod initialize;
@@ -10,7 +9,6 @@ pub mod transfer_mint_authority;
 pub mod transfer_ownership;
 
 // Re-export all instructions
-pub use burn::*;
 pub use claim_mint_authority::*;
 pub use claim_ownership::*;
 pub use initialize::*;

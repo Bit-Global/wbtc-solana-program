@@ -220,40 +220,6 @@ describe("Controller Program Tests", () => {
     }
   });
 
-  // Test burning permission check
-  it("Should reject burn operations not called from Factory program", async () => {
-    try {
-      // Try to call burn instruction directly (should fail)
-      const testAmount = new anchor.BN(1000000000); // 1 token
-
-      try {
-        await program.methods
-          .burn({
-            amount: testAmount,
-          })
-          .accounts({
-            controllerStore: controllerStore,
-            tokenMint: tokenMint,
-            controllerTokenAccount: controllerTokenAccount,
-            tokenProgram: TOKEN_PROGRAM_ID,
-            associatedTokenProgram: anchor.utils.token.ASSOCIATED_PROGRAM_ID,
-            factoryProgram: factoryKeypair.publicKey, // Using incorrect program ID
-            instructionSysvar: anchor.web3.SYSVAR_INSTRUCTIONS_PUBKEY,
-          })
-          .rpc();
-
-        // If execution reaches here, test should fail as operation should be rejected
-        assert.fail("Burn operation should be rejected but succeeded");
-      } catch (err) {
-        // Expect operation to be rejected
-        console.log("Burn operation correctly rejected");
-      }
-    } catch (err) {
-      console.error("Testing burn failed:", err);
-      throw err;
-    }
-  });
-
   // Test start ownership transfer
   it("Start ownership transfer", async () => {
     try {

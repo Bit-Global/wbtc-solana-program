@@ -1,7 +1,4 @@
 use anchor_lang::prelude::*;
-use controller::cpi as controller_cpi;
-use controller::cpi::accounts as controller_accounts;
-use controller::program::Controller as ControllerProgram;
 use crate::errors::FactoryError;
 use crate::events::{Burned, BurnConfirmed};
 use crate::state::{FactoryStore, RequestAccount, RequestStatus, RequestType, MerchantBtcDepositAddress};
@@ -12,13 +9,12 @@ use members::MembersStore;
 use members::MEMBERS_SEED;
 use members::MERCHANT_INFO_SEED;
 use members::MerchantInfo;
-use controller::CONTROLLER_SEED;
-use controller::ControllerStore;
 use anchor_spl::{
     associated_token::AssociatedToken,
-    token_interface::{self, Mint, TokenAccount, TokenInterface, TransferChecked},
+    token_interface::{self, Mint, TokenAccount, TokenInterface, BurnChecked},
 };
-use controller::instructions as controller_instructions;
+use controller::CONTROLLER_SEED;
+use controller::ControllerStore;
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone)]
 pub struct BurnParams {
@@ -82,15 +78,6 @@ pub struct Burn<'info> {
         associated_token::token_program = token_program
     )]
     pub token_account: InterfaceAccount<'info, TokenAccount>,
-    #[account(
-        mut,
-        associated_token::mint = token_mint,
-        associated_token::authority = controller_store,
-        associated_token::token_program = token_program
-    )]
-    pub controller_token_account: InterfaceAccount<'info, TokenAccount>,
-    #[account(address = controller::ID)]
-    pub controller_program: Program<'info, ControllerProgram>,
     pub token_program: Interface<'info, TokenInterface>,
     pub associated_token_program: Program<'info, AssociatedToken>, 
     pub system_program: Program<'info, System>,
@@ -121,45 +108,21 @@ pub fn burn_handler(ctx: Context<Burn>, params: BurnParams) -> Result<()> {
     // update the counter
     factory_store.burn_request_counter += 1;
 
-    // first transfer the tokens from merchant account to controller PDA account
-    let transfer_cpi_accounts = TransferChecked {
-        from: ctx.accounts.token_account.to_account_info(),
+    // directly burn tokens from the user's account
+    let burn_cpi_accounts = BurnChecked {
         mint: ctx.accounts.token_mint.to_account_info(),
-        to: ctx.accounts.controller_token_account.to_account_info(),
+        from: ctx.accounts.token_account.to_account_info(),
         authority: ctx.accounts.payer.to_account_info(),
     };
-    
-    let transfer_cpi_ctx = CpiContext::new(
+    let burn_cpi_ctx = CpiContext::new(
         ctx.accounts.token_program.to_account_info(),
-        transfer_cpi_accounts,
+        burn_cpi_accounts,
     );
-    token_interface::transfer_checked(
-        transfer_cpi_ctx,
+    token_interface::burn_checked(
+        burn_cpi_ctx,
         params.amount,
         ctx.accounts.token_mint.decimals,
     )?;
-
-    // call the controller's burn method
-    let cpi_program = ctx.accounts.controller_program.to_account_info();
-    let cpi_accounts = controller_accounts::Burn {
-        factory_store: ctx.accounts.factory_store.to_account_info(),
-        controller_store: ctx.accounts.controller_store.to_account_info(),
-        token_mint: ctx.accounts.token_mint.to_account_info(),
-        controller_token_account: ctx.accounts.controller_token_account.to_account_info(),
-        token_program: ctx.accounts.token_program.to_account_info(),
-        associated_token_program: ctx.accounts.associated_token_program.to_account_info(),
-    };
-    
-    // prepare PDA signature
-    let factory_seeds = &[FACTORY_SEED, &[ctx.accounts.factory_store.bump]];
-    let signer_seeds = &[&factory_seeds[..]];
-    
-    // use with_signer to pass PDA signature
-    let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
-    
-    controller_cpi::burn(cpi_ctx, controller_instructions::burn::BurnParams { 
-        amount: params.amount,
-    })?;
 
     // emit the event
     emit!(Burned {
