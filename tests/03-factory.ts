@@ -49,7 +49,6 @@ describe("factory", () => {
   const payer = provider.wallet.publicKey;
   let tokenMint: PublicKey;
   let controllerStore: PublicKey;
-  let controllerTokenAccount: PublicKey;
   let controllerStoreBump: number;
   let factoryStore: PublicKey;
   let factoryStoreBump: number;
@@ -99,10 +98,7 @@ describe("factory", () => {
     controllerStore = result.controllerStore as PublicKey;
     tokenMint = result.tokenMint as PublicKey;
     controllerStoreBump = sharedState.controllerStoreBump;
-    controllerTokenAccount = sharedState.controllerTokenAccount as PublicKey;
-
     console.log("Controller store PDA:", controllerStore.toString());
-    console.log("Controller token account:", controllerTokenAccount.toString());
 
     // Initialize Factory program using helper module
     factoryStore = await initializeFactory(

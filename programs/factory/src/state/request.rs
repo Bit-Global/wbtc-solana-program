@@ -7,7 +7,7 @@ pub struct RequestAccount {
     pub request_type: RequestType, // Mint or Burn
     pub requester: Pubkey,
     pub amount: u64,
-    #[max_len(62)]
+    #[max_len(100)]
     pub btc_deposit_address: String,
     #[max_len(64)]
     pub btc_txid: String,

@@ -74,13 +74,8 @@ describe("Controller Program Tests", () => {
     tokenMint = result.tokenMint as PublicKey;
 
     controllerBump = sharedState.controllerStoreBump;
-    controllerTokenAccount = sharedState.controllerTokenAccount as PublicKey;
-
     console.log(
       `Controller PDA: ${controllerStore.toString()}, Bump: ${controllerBump}`
-    );
-    console.log(
-      `Controller token account address: ${controllerTokenAccount.toString()}`
     );
 
     // Calculate user token account address
@@ -112,37 +107,6 @@ describe("Controller Program Tests", () => {
         controllerAccount.pendingOwner.toString(),
         PublicKey.default.toString()
       );
-
-      // Verify that the controller's Associated Token Account was created successfully
-      try {
-        const tokenAccountInfo = await getAccount(
-          provider.connection,
-          controllerTokenAccount
-        );
-
-        // Verify the token account properties
-        assert.ok(tokenAccountInfo, "Controller token account should exist");
-        assert.equal(
-          tokenAccountInfo.mint.toString(),
-          tokenMint.toString(),
-          "Token account mint should match"
-        );
-        assert.equal(
-          tokenAccountInfo.owner.toString(),
-          controllerStore.toString(),
-          "Token account owner should be the controller PDA"
-        );
-        assert.equal(
-          tokenAccountInfo.amount.toString(),
-          "0",
-          "Initial token balance should be 0"
-        );
-
-        console.log("Controller initialization verified successfully");
-      } catch (err) {
-        console.error("Failed to verify controller token account:", err);
-        throw new Error("Controller token account verification failed");
-      }
     } catch (err) {
       console.error("Verification failed:", err);
       throw err;

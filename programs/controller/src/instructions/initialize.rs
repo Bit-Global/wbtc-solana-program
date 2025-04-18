@@ -22,17 +22,7 @@ pub struct Initialize<'info> {
     pub controller_store: Account<'info, ControllerStore>,
     #[account(mint::token_program = token_program)]
     pub token_mint: InterfaceAccount<'info, Mint>,
-    /// CHECK: the controller token account
-    #[account(
-        init,
-        payer = payer,
-        associated_token::mint = token_mint,
-        associated_token::authority = controller_store,
-        associated_token::token_program = token_program
-     )]
-    pub controller_token_account: InterfaceAccount<'info, TokenAccount>,
     pub token_program: Interface<'info, TokenInterface>,
-    pub associated_token_program: Program<'info, AssociatedToken>,
     pub system_program: Program<'info, System>,
 }
 
@@ -53,8 +43,7 @@ pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
 
     emit!(ControllerInitialized {
         token_mint: controller_store.token_mint,
-        owner: controller_store.owner,
-        controller_token_account: ctx.accounts.controller_token_account.key(),
+        owner: controller_store.owner
     });
 
     Ok(())

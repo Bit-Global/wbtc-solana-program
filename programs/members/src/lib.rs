@@ -12,7 +12,7 @@ pub use events::*;
 pub use instructions::*;
 pub use state::*;
 
-declare_id!("B5joQaTLCcc3mwiWh63qBVvEsz7VsagMann3mFGQq9Sb");
+declare_id!("3zPRbygSbahvyrTHjvNyxmAVZh1qrAa3svDcbu4LWzxP");
 
 // Seeds constants
 pub const MEMBERS_SEED: &[u8] = b"members";

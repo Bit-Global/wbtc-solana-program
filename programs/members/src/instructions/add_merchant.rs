@@ -46,7 +46,7 @@ pub fn add_merchant(ctx: Context<AddMerchant>, params: AddMerchantParams) -> Res
     merchant_info.bump = ctx.bumps.merchant_info;
 
     // update merchant count
-    members_store.merchant_count += 1;
+    members_store.merchant_count = members_store.merchant_count.saturating_add(1);
 
     emit!(MerchantAdd {
         merchant: params.merchant,

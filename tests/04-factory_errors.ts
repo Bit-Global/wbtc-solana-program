@@ -68,7 +68,6 @@ describe("factory_error_tests", () => {
   let merchantBtcAddress: PublicKey, merchantBtcAddressBump: number;
   let requestAccount: PublicKey, requestAccountBump: number;
   let tokenMint: PublicKey;
-  let controllerTokenAccount: PublicKey;
   let controllerStoreBump: number;
   let factoryStoreBump: number;
   let membersStoreBump: number;
@@ -130,10 +129,7 @@ describe("factory_error_tests", () => {
     controllerStore = result.controllerStore as PublicKey;
     tokenMint = result.tokenMint as PublicKey;
     controllerStoreBump = sharedState.controllerStoreBump;
-    controllerTokenAccount = sharedState.controllerTokenAccount as PublicKey;
-
     console.log("Controller store PDA:", controllerStore.toString());
-    console.log("Controller token account:", controllerTokenAccount.toString());
 
     // 使用辅助模块初始化 Factory 程序
     const fsResult = await initializeFactory(
@@ -692,7 +688,6 @@ describe("factory_error_tests", () => {
           merchantInfo,
           tokenMint,
           tokenAccount: merchantTokenAccount,
-          controllerTokenAccount,
           tokenProgram: TOKEN_PROGRAM_ID,
           associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
           systemProgram: SystemProgram.programId,
@@ -765,7 +760,6 @@ describe("factory_error_tests", () => {
         merchantBtcAddress,
         tokenMint,
         tokenAccount: merchantTokenAccount,
-        controllerTokenAccount,
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
         systemProgram: SystemProgram.programId,
@@ -892,7 +886,6 @@ describe("factory_error_tests", () => {
           merchantBtcAddress,
           tokenMint,
           tokenAccount: merchantTokenAccount,
-          controllerTokenAccount,
           tokenProgram: TOKEN_PROGRAM_ID,
           associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
           systemProgram: SystemProgram.programId,
@@ -943,7 +936,6 @@ describe("factory_error_tests", () => {
           merchantBtcAddress,
           tokenMint,
           tokenAccount: merchantTokenAccount,
-          controllerTokenAccount,
           tokenProgram: TOKEN_PROGRAM_ID,
           associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
           systemProgram: SystemProgram.programId,

@@ -29,7 +29,6 @@ export const sharedState = {
   factoryStore: null as PublicKey | null,
   factoryStoreBump: 0,
   tokenMint: null as PublicKey | null,
-  controllerTokenAccount: null as PublicKey | null,
 };
 
 // Initialize Members program
@@ -117,14 +116,6 @@ export async function initializeController(
     sharedState.tokenMint = tokenMint;
   }
 
-  // Calculate Controller's token account address
-  const controllerTokenAccount = await getAssociatedTokenAddress(
-    tokenMint,
-    controllerStore,
-    true
-  );
-  sharedState.controllerTokenAccount = controllerTokenAccount;
-
   // Check if Controller account already exists
   try {
     await program.account.controllerStore.fetch(controllerStore);
@@ -151,7 +142,6 @@ export async function initializeController(
         payer: wallet.publicKey,
         controllerStore: controllerStore,
         tokenMint: tokenMint,
-        controllerTokenAccount: controllerTokenAccount,
         tokenProgram: TOKEN_PROGRAM_ID,
         associatedTokenProgram: anchor.utils.token.ASSOCIATED_PROGRAM_ID,
         systemProgram: SystemProgram.programId,

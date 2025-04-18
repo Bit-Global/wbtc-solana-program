@@ -26,7 +26,6 @@ pub struct OwnershipTransferred {
 pub struct ControllerInitialized {
     pub token_mint: Pubkey,
     pub owner: Pubkey,
-    pub controller_token_account: Pubkey,
 }
 
 #[event]

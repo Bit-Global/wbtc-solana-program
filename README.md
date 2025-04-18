@@ -49,19 +49,36 @@ The Factory program handles minting and burning requests from end users and serv
 
 ### wBTC Minting Flow:
 
-1. Merchant initiates a mint request to the Factory program
-2. Custodian sets the BTC deposit address
-3. User sends BTC to the deposit address
-4. Custodian confirms the BTC transaction
-5. Factory program calls the Controller program to mint an equivalent amount of wBTC tokens
+1. **Initialization Phase**:
+
+   - Custodian sets the merchant's BTC deposit address via `setCustodianBtcDepositAddress`
+
+2. **Mint Request Phase**:
+
+   - Merchant sends BTC to the Custodian's designated BTC address (obtains transaction ID)
+   - Merchant initiates a mint request to the Factory program via `addMintRequest` (amount, btcTxid, btcDepositAddress)
+   - Factory program creates a mint request with status set to PENDING
+
+3. **Request Processing Phase**:
+   - Merchant can cancel the mint request via `cancelMintRequest`
+   - Custodian can reject the mint request via `rejectMintRequest`
+   - Custodian confirms the mint request via `confirmMintRequest`, and Factory program calls Controller program to mint an equivalent amount of wBTC tokens
 
 ### wBTC Burning Flow:
 
-1. Merchant sets their BTC deposit address
-2. Merchant initiates a burn request (locking wBTC tokens)
-3. Custodian processes the request, sending the corresponding amount of BTC to the merchant's BTC address
-4. Custodian confirms the BTC transaction
-5. wBTC tokens are burned
+1. **Initialization Phase**:
+
+   - Merchant sets their own BTC withdrawal address via `setMerchantBtcDepositAddress`
+
+2. **Burn Request Phase**:
+
+   - Merchant initiates a burn request via `burn`, Factory program creates a burn request (status set to PENDING)
+   - Factory program burns the user's wBTC tokens
+
+3. **Request Processing Phase**:
+   - Custodian queries the merchant's BTC address
+   - Custodian sends the corresponding amount of BTC to the merchant's BTC address
+   - Custodian confirms the burn request via `confirmBurnRequest` (providing btcTxid), updating the request status to APPROVED
 
 ## Security Model
 

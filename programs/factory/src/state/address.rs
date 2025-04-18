@@ -5,7 +5,7 @@ use anchor_lang::prelude::*;
 #[derive(InitSpace)]
 pub struct CustodianBtcDepositAddress {
     pub merchant: Pubkey,
-    #[max_len(62)]
+    #[max_len(100)]
     pub btc_address: String,
     pub bump: u8,
 }
@@ -15,7 +15,7 @@ pub struct CustodianBtcDepositAddress {
 #[derive(InitSpace)]
 pub struct MerchantBtcDepositAddress {
     pub merchant: Pubkey,
-    #[max_len(62)]
+    #[max_len(100)]
     pub btc_address: String,
     pub bump: u8,
 } 

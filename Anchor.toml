@@ -5,14 +5,14 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-controller = "3pVBN6dAvQMp7xG73t2y2isiEcZGqkyjXkySW6SdrG6v"
-factory = "6oJjbaBrFFzcy4h5Qt7pffLTyF737rv5W6uUbcdz98T6"
-members = "2JzLi3jJyQrXSDGY1AVbwWxbGZM29DeodKMCzABhhpJu"
+controller = "657mUtzd2sXVVEixmWbkVGN1Fmw7qYLed26D7tYvNLzt"
+factory = "AHEMjmhS67VivxocceVtTQRt6ytXKmH8AFJFWtN3cn2q"
+members = "3zPRbygSbahvyrTHjvNyxmAVZh1qrAa3svDcbu4LWzxP"
 
 [programs.devnet]
-controller = "3pVBN6dAvQMp7xG73t2y2isiEcZGqkyjXkySW6SdrG6v"
-factory = "6oJjbaBrFFzcy4h5Qt7pffLTyF737rv5W6uUbcdz98T6"
-members = "2JzLi3jJyQrXSDGY1AVbwWxbGZM29DeodKMCzABhhpJu"
+controller = "657mUtzd2sXVVEixmWbkVGN1Fmw7qYLed26D7tYvNLzt"
+factory = "AHEMjmhS67VivxocceVtTQRt6ytXKmH8AFJFWtN3cn2q"
+members = "3zPRbygSbahvyrTHjvNyxmAVZh1qrAa3svDcbu4LWzxP"
 
 [registry]
 url = "https://api.apr.dev"
